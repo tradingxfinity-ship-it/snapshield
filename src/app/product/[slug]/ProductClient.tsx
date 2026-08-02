@@ -16,21 +16,27 @@ import {
   ZoomIn,
   Sparkles,
 } from "lucide-react";
+import Image from "next/image";
 import type { Product } from "@/lib/products";
-import { products } from "@/lib/products";
+import { products, shopImages } from "@/lib/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
-import SlabVisual from "@/components/ui/SlabVisual";
 import ProductCard from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 
-const angles = [
-  { label: "Front", grade: "10", accentShift: false },
-  { label: "Angle", grade: "10", accentShift: true },
-  { label: "Back", grade: "10", accentShift: false },
-  { label: "Detail", grade: "10", accentShift: true },
-];
+// which card-render colour to show per product for the front/back gallery shots
+const cardColorBySlug: Record<string, "blue" | "black" | "white"> = {
+  "snap-shield-pro": "blue",
+  "snap-shield-vault": "black",
+  "snap-shield-display": "white",
+  "snap-shield-collector-pack": "blue",
+  "snap-shield-travel-case": "black",
+  "snap-shield-clean-kit": "white",
+  "snap-shield-grip": "blue",
+  "snap-shield-frame": "white",
+  "snap-shield-5-color-bundle": "blue",
+};
 
 export default function ProductClient({ product }: { product: Product }) {
   const { addItem, toggleWishlist, wishlist } = useCart();
@@ -66,6 +72,17 @@ export default function ProductClient({ product }: { product: Product }) {
   }, [product.slug]);
 
   const accent = color.hex === "#e5edff" || color.hex === "#f8fafc" ? "#2563EB" : color.hex;
+
+  // real product gallery: lifestyle shot, unboxing shot, card front + back
+  const photo = shopImages[product.slug];
+  const cardColor = cardColorBySlug[product.slug] ?? "blue";
+  const gallery = [
+    photo?.src,
+    photo?.hover,
+    `/card-${cardColor}-front.png`,
+    `/card-${cardColor}-back.png`,
+  ].filter(Boolean) as string[];
+
   const related = products.filter((p) => p.slug !== product.slug && p.category === product.category).slice(0, 4);
   const fill = related.length < 4 ? products.filter((p) => p.slug !== product.slug && !related.includes(p)).slice(0, 4 - related.length) : [];
   const relatedFinal = [...related, ...fill];
@@ -106,13 +123,9 @@ export default function ProductClient({ product }: { product: Product }) {
               onMouseEnter={() => setZoom((z) => ({ ...z, on: true }))}
               onMouseLeave={() => setZoom((z) => ({ ...z, on: false }))}
               onMouseMove={onMove}
-              className="group relative flex aspect-square items-center justify-center overflow-hidden rounded-[2.5rem] border border-slate-100 bg-gradient-to-br from-mist to-white shadow-soft"
+              className="group relative aspect-square overflow-hidden rounded-[2.5rem] border border-slate-100 bg-mist shadow-soft"
             >
-              <div
-                className="absolute inset-0 opacity-60"
-                style={{ background: `radial-gradient(60% 60% at 50% 40%, ${accent}22, transparent 70%)` }}
-              />
-              <span className="absolute right-5 top-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-slate-500 backdrop-blur">
+              <span className="pointer-events-none absolute right-5 top-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-slate-500 backdrop-blur">
                 <ZoomIn className="h-3.5 w-3.5" /> Hover to zoom
               </span>
               {product.badge && (
@@ -122,38 +135,42 @@ export default function ProductClient({ product }: { product: Product }) {
               )}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={color.name + active}
-                  initial={{ opacity: 0, scale: 0.96, rotateY: active % 2 ? -12 : 0 }}
-                  animate={{ opacity: 1, scale: 1, rotateY: active === 1 ? 14 : active === 3 ? -8 : 0 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-[58%]"
-                  style={{
-                    transform: zoom.on ? "scale(1.15)" : undefined,
-                    transformOrigin: `${zoom.x}% ${zoom.y}%`,
-                    transition: "transform 0.3s ease",
-                  }}
+                  key={active}
+                  initial={{ opacity: 0, scale: 1.02 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0"
                 >
-                  <SlabVisual accent={accent} guard={color.hex} id="pdp-slab" />
+                  <Image
+                    src={gallery[active]}
+                    alt={product.name}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 560px"
+                    className="object-cover"
+                    style={{
+                      transform: zoom.on ? "scale(1.6)" : undefined,
+                      transformOrigin: `${zoom.x}% ${zoom.y}%`,
+                      transition: "transform 0.3s ease",
+                    }}
+                  />
                 </motion.div>
               </AnimatePresence>
             </div>
 
             {/* thumbnails */}
             <div className="mt-4 grid grid-cols-4 gap-3">
-              {angles.map((a, i) => (
+              {gallery.map((src, i) => (
                 <button
-                  key={a.label}
+                  key={src}
                   onClick={() => setActive(i)}
                   className={cn(
-                    "relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border-2 bg-mist transition",
+                    "relative aspect-square overflow-hidden rounded-2xl border-2 bg-mist transition",
                     active === i ? "border-brand-600 shadow-soft" : "border-transparent hover:border-slate-200"
                   )}
                 >
-                  <div className="w-[52%] transition-transform duration-300 hover:scale-105">
-                    <SlabVisual accent={accent} guard={color.hex} id={`thumb-${i}`} />
-                  </div>
-                  <span className="absolute bottom-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-500">{a.label}</span>
+                  <Image src={src} alt="" fill sizes="140px" className="object-cover transition-transform duration-300 hover:scale-105" />
                 </button>
               ))}
             </div>
