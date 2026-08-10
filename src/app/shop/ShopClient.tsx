@@ -49,7 +49,7 @@ export default function ShopClient() {
   const slides = ["/shop-banner-1.png", "/shop-banner-2.png", "/shop-banner-3.png"];
   const [slide, setSlide] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 4500);
+    const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 3500);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -71,32 +71,23 @@ export default function ShopClient() {
       {/* ---------- full-bleed banner slideshow ---------- */}
       <div className="relative h-[360px] w-full overflow-hidden sm:h-[480px]">
         {slides.map((src, i) => (
-          <div
+          <motion.div
             key={src}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-              i === slide ? "opacity-100" : "opacity-0"
-            )}
+            className="absolute inset-0"
+            animate={{ opacity: i === slide ? 1 : 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
           >
-            <Image src={src} alt="" fill priority={i === 0} sizes="100vw" className="object-cover object-center" />
-          </div>
+            <motion.div
+              className="absolute inset-0"
+              initial={false}
+              animate={{ scale: i === slide ? 1.12 : 1 }}
+              transition={{ duration: i === slide ? 4 : 0.8, ease: "easeOut" }}
+            >
+              <Image src={src} alt="" fill priority={i === 0} sizes="100vw" className="object-cover object-center" />
+            </motion.div>
+          </motion.div>
         ))}
         <div className="pointer-events-none absolute inset-0 bg-navy/10" />
-
-        {/* slide dots */}
-        <div className="absolute bottom-24 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:bottom-28">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setSlide(i)}
-              aria-label={`Slide ${i + 1}`}
-              className={cn(
-                "h-2 rounded-full transition-all duration-300",
-                i === slide ? "w-6 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
-              )}
-            />
-          ))}
-        </div>
       </div>
 
       {/* overlapping search card */}
