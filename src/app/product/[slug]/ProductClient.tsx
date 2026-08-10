@@ -18,25 +18,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
-import { products, shopImages } from "@/lib/products";
+import { products } from "@/lib/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-
-// which card-render colour to show per product for the front/back gallery shots
-const cardColorBySlug: Record<string, "blue" | "black" | "white"> = {
-  "snap-shield-pro": "blue",
-  "snap-shield-vault": "black",
-  "snap-shield-display": "white",
-  "snap-shield-collector-pack": "blue",
-  "snap-shield-travel-case": "black",
-  "snap-shield-clean-kit": "white",
-  "snap-shield-grip": "blue",
-  "snap-shield-frame": "white",
-  "snap-shield-5-color-bundle": "blue",
-};
 
 export default function ProductClient({ product }: { product: Product }) {
   const { addItem, toggleWishlist, wishlist } = useCart();
@@ -73,15 +60,8 @@ export default function ProductClient({ product }: { product: Product }) {
 
   const accent = color.hex === "#e5edff" || color.hex === "#f8fafc" ? "#2563EB" : color.hex;
 
-  // real product gallery: lifestyle shot, unboxing shot, card front + back
-  const photo = shopImages[product.slug];
-  const cardColor = cardColorBySlug[product.slug] ?? "blue";
-  const gallery = [
-    photo?.src,
-    photo?.hover,
-    `/card-${cardColor}-front.png`,
-    `/card-${cardColor}-back.png`,
-  ].filter(Boolean) as string[];
+  // product gallery — the finish's slab photo
+  const gallery = [product.image];
 
   const related = products.filter((p) => p.slug !== product.slug && p.category === product.category).slice(0, 4);
   const fill = related.length < 4 ? products.filter((p) => p.slug !== product.slug && !related.includes(p)).slice(0, 4 - related.length) : [];
@@ -160,20 +140,22 @@ export default function ProductClient({ product }: { product: Product }) {
             </div>
 
             {/* thumbnails */}
-            <div className="mt-4 grid grid-cols-4 gap-3">
-              {gallery.map((src, i) => (
-                <button
-                  key={src}
-                  onClick={() => setActive(i)}
-                  className={cn(
-                    "relative aspect-square overflow-hidden rounded-2xl border-2 bg-mist transition",
-                    active === i ? "border-brand-600 shadow-soft" : "border-transparent hover:border-slate-200"
-                  )}
-                >
-                  <Image src={src} alt="" fill sizes="140px" className="object-cover transition-transform duration-300 hover:scale-105" />
-                </button>
-              ))}
-            </div>
+            {gallery.length > 1 && (
+              <div className="mt-4 grid grid-cols-4 gap-3">
+                {gallery.map((src, i) => (
+                  <button
+                    key={src}
+                    onClick={() => setActive(i)}
+                    className={cn(
+                      "relative aspect-square overflow-hidden rounded-2xl border-2 bg-mist transition",
+                      active === i ? "border-brand-600 shadow-soft" : "border-transparent hover:border-slate-200"
+                    )}
+                  >
+                    <Image src={src} alt="" fill sizes="140px" className="object-cover transition-transform duration-300 hover:scale-105" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* details */}

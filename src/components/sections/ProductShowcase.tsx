@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Check, RefreshCw } from "lucide-react";
 import Image from "next/image";
-import { getProduct } from "@/lib/products";
+import { products } from "@/lib/products";
 import { Reveal } from "../ui/Reveal";
 import { ButtonLink } from "../ui/Button";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ const finishes = [
 ];
 
 export default function ProductShowcase() {
-  const product = getProduct("snap-shield-pro")!;
+  const product = products[0];
   const [finish, setFinish] = useState(finishes[0]);
 
   return (

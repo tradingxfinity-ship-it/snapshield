@@ -6,18 +6,17 @@ const columns = [
   {
     title: "Shop",
     links: [
-      { label: "All Products", href: "/shop" },
+      { label: "All Slabs", href: "/shop" },
+      { label: "Best Sellers", href: "/shop?filter=best" },
+      { label: "New Arrivals", href: "/shop" },
       { label: "Slab Guards", href: "/shop?category=Slab%20Guards" },
-      { label: "Display Guards", href: "/shop?category=Display" },
-      { label: "Bundles", href: "/shop?category=Bundles" },
-      { label: "Cases", href: "/shop?category=Cases" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "Our Story", href: "/#why" },
-      { label: "Bundles", href: "/shop?category=Bundles" },
+      { label: "Why Snap Shield", href: "/#why" },
       { label: "Reviews", href: "/#reviews" },
       { label: "FAQ", href: "/#faq" },
     ],
