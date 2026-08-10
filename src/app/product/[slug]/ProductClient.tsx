@@ -103,7 +103,7 @@ export default function ProductClient({ product }: { product: Product }) {
               onMouseEnter={() => setZoom((z) => ({ ...z, on: true }))}
               onMouseLeave={() => setZoom((z) => ({ ...z, on: false }))}
               onMouseMove={onMove}
-              className="group relative aspect-square overflow-hidden rounded-[2.5rem] border border-slate-100 bg-mist shadow-soft"
+              className="group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-slate-100 bg-mist shadow-soft"
             >
               <span className="pointer-events-none absolute right-5 top-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-slate-500 backdrop-blur">
                 <ZoomIn className="h-3.5 w-3.5" /> Hover to zoom
