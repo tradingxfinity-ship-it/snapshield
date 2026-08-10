@@ -46,7 +46,7 @@ export default function ShopClient() {
   });
 
   // banner slideshow
-  const slides = ["/hero-bg.png", "/why-snapshield.jpg", "/shop-blue-hover.png", "/shop-3set-hover.png"];
+  const slides = ["/shop-banner-1.png", "/shop-banner-2.png", "/shop-banner-3.png"];
   const [slide, setSlide] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 4500);
