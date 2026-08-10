@@ -195,7 +195,7 @@ export default function ShopClient() {
                     >
                       <Star className={cn("h-4 w-4", wished && "fill-amber-400 text-amber-400")} />
                     </button>
-                    <Link href={`/product/${p.slug}`} className="block aspect-square overflow-hidden rounded-xl bg-mist">
+                    <Link href={`/product/${p.slug}`} className="block aspect-[4/5] overflow-hidden rounded-xl bg-mist">
                       {photo ? (
                         <Image
                           src={photo.src}
