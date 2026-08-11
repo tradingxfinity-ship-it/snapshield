@@ -49,7 +49,7 @@ export default function ShopClient() {
   const slides = ["/shop-banner-1.png", "/shop-banner-2.png", "/shop-banner-3.png"];
   const [slide, setSlide] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 3500);
+    const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 5000);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -81,7 +81,7 @@ export default function ShopClient() {
               className="absolute inset-0"
               initial={false}
               animate={{ scale: i === slide ? 1.12 : 1 }}
-              transition={{ duration: i === slide ? 4 : 0.8, ease: "easeOut" }}
+              transition={{ duration: i === slide ? 5.5 : 0.8, ease: "easeOut" }}
             >
               <Image src={src} alt="" fill priority={i === 0} sizes="100vw" className="object-cover object-center" />
             </motion.div>
