@@ -51,12 +51,16 @@ const reviews = [
 
 export default function Reviews() {
   return (
-    <section id="reviews" className="relative py-24 lg:py-32">
-      <div className="container-x">
+    <section id="reviews" className="relative overflow-hidden bg-navy py-24 text-white lg:py-32">
+      {/* blue gradient wash */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy via-brand-900 to-brand-700" />
+      <div className="pointer-events-none absolute -right-40 top-0 h-96 w-96 rounded-full bg-brand-500/30 blur-3xl" />
+      <div className="pointer-events-none absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-brand-400/20 blur-3xl" />
+      <div className="container-x relative">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <Reveal>
-            <p className="text-sm font-bold uppercase tracking-widest text-brand-600">Reviews</p>
-            <h2 className="mt-3 max-w-lg font-display text-4xl font-bold tracking-tight text-navy sm:text-5xl">
+            <p className="text-sm font-bold uppercase tracking-widest text-brand-300">Reviews</p>
+            <h2 className="mt-3 max-w-lg font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Loved by serious collectors
             </h2>
           </Reveal>
