@@ -58,7 +58,7 @@ export default function Hero() {
         </div>
 
         {/* mobile / tablet image banner — shown below the copy so text never overlaps it */}
-        <div className="relative h-[320px] w-full overflow-hidden sm:h-[420px] lg:hidden">
+        <div className="relative h-[440px] w-full overflow-hidden sm:h-[540px] lg:hidden">
           <Image src="/hero-bg.png" alt="Snap Shield graded card guards" fill className="object-cover object-[right_center]" />
         </div>
       </div>
