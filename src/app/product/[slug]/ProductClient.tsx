@@ -280,46 +280,6 @@ export default function ProductClient({ product }: { product: Product }) {
           </div>
         </div>
 
-        {/* reviews */}
-        <section className="border-t border-slate-100 py-16">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-navy">Customer Reviews</h2>
-              <div className="flex items-center gap-2">
-                <span className="text-3xl font-extrabold text-navy">{product.rating}</span>
-                <div>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-500">{product.reviewCount.toLocaleString()} verified</p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {[
-              { n: "Ethan M.", t: "Fits my PSA 10 Charizard like a glove. Premium feel, zero haze." },
-              { n: "Sofia L.", t: "Exactly what I wanted — protection that actually looks expensive." },
-              { n: "Ray G.", t: "Snaps on perfectly and the finish is gorgeous. Buying more." },
-            ].map((r, i) => (
-              <Reveal key={r.n} delay={i * 0.08}>
-                <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, s) => (
-                      <Star key={s} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-700">“{r.t}”</p>
-                  <p className="mt-4 text-sm font-bold text-navy">{r.n}</p>
-                  <p className="text-xs text-slate-400">Verified buyer</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
         {/* related */}
         <section className="border-t border-slate-100 py-16">
           <h2 className="font-display text-3xl font-bold tracking-tight text-navy">You may also like</h2>
