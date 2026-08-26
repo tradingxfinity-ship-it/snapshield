@@ -13,18 +13,19 @@ export default function ProductShowcase() {
     <section className="relative overflow-hidden py-24 lg:py-32">
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" />
       <div className="container-x relative grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* image */}
+        {/* image — transparent PNG floating on the section */}
         <Reveal>
-          <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-100 bg-[#0a0a12] shadow-premium">
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-0 -z-10 scale-90 rounded-full bg-brand-400/20 blur-3xl" />
             <Image
               src="/colors-showcase.png"
               alt="Snap Shield PSA slab guards in many colours"
               width={1536}
               height={1024}
               priority
-              className="h-auto w-full"
+              className="h-auto w-full drop-shadow-[0_30px_60px_rgba(15,23,42,0.18)]"
             />
-            <span className="absolute left-5 top-5 rounded-full bg-white/15 px-4 py-1.5 text-sm font-bold text-white backdrop-blur">
+            <span className="absolute left-2 top-2 rounded-full bg-navy px-4 py-1.5 text-sm font-bold text-white shadow-soft">
               40+ finishes
             </span>
           </div>
