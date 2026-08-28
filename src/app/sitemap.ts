@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { products } from "@/lib/products";
+import { getProducts } from "@/lib/products-source";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://snapshield.example";
   const now = new Date();
+  const products = await getProducts();
   return [
     { url: base, lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/shop`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },

@@ -18,15 +18,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
-import { products } from "@/lib/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useProducts } from "@/context/ProductsContext";
 import ProductCard from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 
 export default function ProductClient({ product }: { product: Product }) {
   const { addItem, toggleWishlist, wishlist } = useCart();
+  const products = useProducts();
   const [color, setColor] = useState(product.colors[0]);
   const [qty, setQty] = useState(1);
   const [active, setActive] = useState(0);

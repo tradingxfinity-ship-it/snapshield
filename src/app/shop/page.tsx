@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import ShopClient from "./ShopClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Shop Premium PSA Slab Guards",
   description:

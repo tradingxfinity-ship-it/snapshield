@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heart, Plus, Star } from "lucide-react";
 import type { Product } from "@/lib/products";
-import { shopImages } from "@/lib/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import SlabVisual from "./SlabVisual";
@@ -13,7 +12,7 @@ import SlabVisual from "./SlabVisual";
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const { addItem, toggleWishlist, wishlist } = useCart();
   const wished = wishlist.includes(product.slug);
-  const photo = shopImages[product.slug];
+  const photo = product.image ? { src: product.image, hover: product.image } : null;
 
   return (
     <motion.div

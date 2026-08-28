@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { products } from "@/lib/products";
+import { getProducts } from "@/lib/products-source";
 import ProductCard from "../ui/ProductCard";
 import { Reveal } from "../ui/Reveal";
 
-export default function FeaturedProducts() {
-  const featured = products.slice(0, 4);
+export default async function FeaturedProducts() {
+  const all = await getProducts();
+  const featured = all.slice(0, 4);
   return (
     <section id="shop" className="relative py-24 lg:py-32">
       <div className="container-x">

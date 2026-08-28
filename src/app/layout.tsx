@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { ProductsProvider } from "@/context/ProductsContext";
+import { getProducts } from "@/lib/products-source";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -50,7 +52,8 @@ const orgSchema = {
   slogan: "Protect What Matters.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const products = await getProducts();
   return (
     <html lang="en" className={`${inter.variable} ${grotesk.variable}`}>
       <body className="bg-white font-sans text-navy antialiased">
@@ -58,16 +61,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
-        <CartProvider>
-          <ChromeGate>
-            <Navbar />
-          </ChromeGate>
-          <main>{children}</main>
-          <ChromeGate>
-            <Footer />
-            <CartDrawer />
-          </ChromeGate>
-        </CartProvider>
+        <ProductsProvider products={products}>
+          <CartProvider>
+            <ChromeGate>
+              <Navbar />
+            </ChromeGate>
+            <main>{children}</main>
+            <ChromeGate>
+              <Footer />
+              <CartDrawer />
+            </ChromeGate>
+          </CartProvider>
+        </ProductsProvider>
       </body>
     </html>
   );

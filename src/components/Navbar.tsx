@@ -6,7 +6,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { Heart, Menu, Search, ShoppingBag, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { products, categories, shopImages } from "@/lib/products";
+import { categories } from "@/lib/products";
+import { useProducts, useShopImages } from "@/context/ProductsContext";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -19,6 +20,8 @@ const navLinks = [
 
 export default function Navbar() {
   const { count, openCart, wishlist } = useCart();
+  const products = useProducts();
+  const shopImages = useShopImages();
   const [scrolled, setScrolled] = useState(false);
   const [mega, setMega] = useState(false);
   const [mobile, setMobile] = useState(false);
@@ -248,6 +251,7 @@ export default function Navbar() {
 }
 
 function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const products = useProducts();
   const [q, setQ] = useState("");
   const results = q
     ? products.filter((p) => (p.name + p.tagline + p.category).toLowerCase().includes(q.toLowerCase()))

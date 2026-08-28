@@ -6,6 +6,8 @@ import Reviews from "@/components/sections/Reviews";
 import FAQ from "@/components/sections/FAQ";
 import Newsletter from "@/components/sections/Newsletter";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

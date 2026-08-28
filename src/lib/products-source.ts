@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import {
   products as staticProducts,
   rowToProduct,
@@ -6,6 +7,8 @@ import {
   type ProductRow,
 } from "./products";
 import { supabasePublic, supabaseAdmin } from "./supabase";
+
+export const PRODUCTS_TAG = "products";
 
 /**
  * Server-side product source. Reads from Supabase when configured, otherwise
@@ -19,7 +22,7 @@ function client() {
   return supabaseAdmin() ?? supabasePublic();
 }
 
-export async function getProducts(): Promise<Product[]> {
+async function fetchProducts(): Promise<Product[]> {
   const db = client();
   if (!db) return staticProducts;
   try {
@@ -37,6 +40,16 @@ export async function getProducts(): Promise<Product[]> {
     return staticProducts;
   }
 }
+
+/**
+ * Cached across requests and tagged so admin writes can invalidate it
+ * (`revalidateTag(PRODUCTS_TAG)`), giving instant freshness on edits while
+ * keeping storefront reads cheap. Revalidates at most every 60s as a backstop.
+ */
+export const getProducts = unstable_cache(fetchProducts, ["products-all"], {
+  tags: [PRODUCTS_TAG],
+  revalidate: 60,
+});
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const all = await getProducts();

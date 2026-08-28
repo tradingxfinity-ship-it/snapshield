@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase";
 import { normalizeProductInput } from "@/lib/admin-products";
+import { PRODUCTS_TAG } from "@/lib/products-source";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +55,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
     .select()
     .single();
   if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 });
+  revalidateTag(PRODUCTS_TAG);
   return NextResponse.json({ product: data });
 }
 
@@ -63,5 +66,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ slug
   if (!db) return res;
   const { error } = await db.from("products").delete().eq("slug", slug);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  revalidateTag(PRODUCTS_TAG);
   return NextResponse.json({ ok: true });
 }

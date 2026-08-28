@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase";
 import { products as staticProducts, productToRow, type ProductRow } from "@/lib/products";
 import { normalizeProductInput } from "@/lib/admin-products";
+import { PRODUCTS_TAG } from "@/lib/products-source";
 
 export const dynamic = "force-dynamic";
 
@@ -52,5 +54,6 @@ export async function POST(req: Request) {
 
   const { data, error: insertError } = await db.from("products").insert(row).select().single();
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+  revalidateTag(PRODUCTS_TAG);
   return NextResponse.json({ product: data });
 }

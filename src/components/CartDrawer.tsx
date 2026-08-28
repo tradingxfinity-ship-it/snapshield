@@ -3,13 +3,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus, ShoppingBag, Trash2, Truck, X, Lock, Apple } from "lucide-react";
 import { useCart, FREE_SHIP_THRESHOLD } from "@/context/CartContext";
-import { products } from "@/lib/products";
+import { useProducts } from "@/context/ProductsContext";
 import { formatPrice } from "@/lib/utils";
 import { ButtonLink } from "./ui/Button";
 import Link from "next/link";
 
 export default function CartDrawer() {
   const { isOpen, closeCart, items, updateQty, removeItem, subtotal, addItem } = useCart();
+  const products = useProducts();
 
   const remaining = Math.max(0, FREE_SHIP_THRESHOLD - subtotal);
   const progress = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100);

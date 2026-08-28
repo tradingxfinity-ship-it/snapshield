@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
-import { getProduct } from "@/lib/products";
+import { getProducts } from "@/lib/products-source";
 
 export const runtime = "nodejs";
 
@@ -32,8 +32,11 @@ export async function POST(req: Request) {
   }[] = [];
   let subtotal = 0;
 
+  const catalogue = await getProducts();
+  const bySlug = new Map(catalogue.map((p) => [p.slug, p]));
+
   for (const it of items) {
-    const product = getProduct(it.slug);
+    const product = bySlug.get(it.slug);
     if (!product) continue;
     const qty = Math.min(Math.max(1, Math.floor(Number(it.qty) || 1)), 20);
     subtotal += product.price * qty;

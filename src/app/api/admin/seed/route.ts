@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase";
 import { products as staticProducts, productToRow } from "@/lib/products";
+import { PRODUCTS_TAG } from "@/lib/products-source";
 
 export const dynamic = "force-dynamic";
 
@@ -23,5 +25,6 @@ export async function POST() {
     .upsert(rows, { onConflict: "slug", count: "exact" });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  revalidateTag(PRODUCTS_TAG);
   return NextResponse.json({ ok: true, seeded: count ?? rows.length });
 }

@@ -20,7 +20,8 @@ import {
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
-import { products, categories, shopImages } from "@/lib/products";
+import { categories } from "@/lib/products";
+import { useProducts, useShopImages } from "@/context/ProductsContext";
 import { useCart } from "@/context/CartContext";
 import { formatPrice, cn } from "@/lib/utils";
 import SlabVisual from "@/components/ui/SlabVisual";
@@ -35,6 +36,8 @@ const catIcons: Record<string, typeof Home> = {
 
 export default function ShopClient() {
   const params = useSearchParams();
+  const products = useProducts();
+  const shopImages = useShopImages();
   const initialCat = params.get("category") ?? "All";
 
   const [category, setCategory] = useState(categories.includes(initialCat) ? initialCat : "All");
