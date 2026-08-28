@@ -100,6 +100,87 @@ export function getProduct(slug: string) {
 
 export const categories = ["All", "Slab Guards"];
 
+// ─── Supabase row ⇄ Product mapping ──────────────────────────────
+// The `products` table stores each Product as an editable row. These helpers
+// convert between the DB shape and the `Product` type the UI uses.
+
+export type ProductRow = {
+  slug: string;
+  name: string;
+  tagline: string | null;
+  description: string | null;
+  price: number | string;
+  compare_at: number | string | null;
+  rating: number | string;
+  review_count: number;
+  badge: string | null;
+  category: string;
+  best_seller: boolean;
+  accent: string;
+  image: string | null;
+  features: string[] | null;
+  specs: { label: string; value: string }[] | null;
+  colors: ColorOption[] | null;
+  pack_size: string;
+  sort_order: number;
+  active: boolean;
+};
+
+const num = (v: number | string | null | undefined, fallback = 0) =>
+  v === null || v === undefined || v === "" ? fallback : Number(v);
+
+export function rowToProduct(row: ProductRow): Product {
+  const accent = row.accent || "#2563EB";
+  const colors =
+    row.colors && row.colors.length > 0
+      ? row.colors
+      : [{ name: row.name, hex: accent, ring: accent }];
+  return {
+    slug: row.slug,
+    name: row.name,
+    tagline: row.tagline ?? "",
+    description: row.description ?? "",
+    price: num(row.price),
+    compareAt: row.compare_at === null || row.compare_at === undefined ? undefined : num(row.compare_at),
+    rating: num(row.rating, 4.8),
+    reviewCount: row.review_count ?? 0,
+    badge: row.badge ?? undefined,
+    category: row.category || "Slab Guards",
+    bestSeller: row.best_seller ?? false,
+    accent,
+    image: row.image || "",
+    colors,
+    features: row.features ?? [],
+    specs: row.specs ?? [],
+    packSize: row.pack_size || "Single guard",
+  };
+}
+
+/** Convert a Product into a DB row payload (for seeding / writes). */
+export function productToRow(p: Product, sortOrder = 0): ProductRow {
+  return {
+    slug: p.slug,
+    name: p.name,
+    tagline: p.tagline,
+    description: p.description,
+    price: p.price,
+    compare_at: p.compareAt ?? null,
+    rating: p.rating,
+    review_count: p.reviewCount,
+    badge: p.badge ?? null,
+    category: p.category,
+    best_seller: p.bestSeller ?? false,
+    accent: p.accent,
+    image: p.image,
+    features: p.features,
+    specs: p.specs,
+    colors: p.colors,
+    pack_size: p.packSize,
+    sort_order: sortOrder,
+    active: true,
+  };
+}
+
 // Real product photography per product slug (single hero shot per finish).
 export const shopImages: Record<string, { src: string; hover: string }> = Object.fromEntries(
   products.map((p) => [p.slug, { src: p.image, hover: p.image }])

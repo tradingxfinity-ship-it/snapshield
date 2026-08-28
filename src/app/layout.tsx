@@ -5,6 +5,7 @@ import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import ChromeGate from "@/components/ChromeGate";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", display: "swap" });
@@ -58,10 +59,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
         <CartProvider>
-          <Navbar />
+          <ChromeGate>
+            <Navbar />
+          </ChromeGate>
           <main>{children}</main>
-          <Footer />
-          <CartDrawer />
+          <ChromeGate>
+            <Footer />
+            <CartDrawer />
+          </ChromeGate>
         </CartProvider>
       </body>
     </html>
