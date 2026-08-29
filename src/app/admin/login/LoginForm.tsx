@@ -39,24 +39,26 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="relative w-full max-w-md">
-      <div className="mb-8 flex flex-col items-center text-center">
-        <Image src="/logo-mark.png" alt="Snap Shield" width={56} height={56} className="h-14 w-14 object-contain" />
-        <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-white">Snap Shield Admin</h1>
-        <p className="mt-1 flex items-center gap-1.5 text-sm text-brand-200">
-          <ShieldCheck className="h-4 w-4" /> Team dashboard
+    <div className="relative w-full max-w-sm">
+      <div className="mb-7 flex flex-col items-center text-center">
+        <span className="grid h-16 w-16 place-items-center rounded-2xl bg-navy shadow-premium">
+          <Image src="/logo-mark.png" alt="Snap Shield" width={40} height={40} className="h-9 w-9 object-contain" />
+        </span>
+        <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-navy">Snap Shield Admin</h1>
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
+          <ShieldCheck className="h-4 w-4 text-brand-600" /> Team dashboard
         </p>
       </div>
 
       <form
         onSubmit={onSubmit}
-        className="rounded-3xl border border-white/10 bg-white/[0.06] p-8 backdrop-blur-xl"
+        className="rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_20px_60px_-20px_rgba(15,23,42,0.18)]"
       >
-        <label htmlFor="password" className="text-sm font-semibold text-white">
+        <label htmlFor="password" className="text-sm font-semibold text-navy">
           Password
         </label>
-        <div className="mt-2 flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 focus-within:border-brand-400">
-          <Lock className="h-4 w-4 text-brand-200" />
+        <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-brand-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-100">
+          <Lock className="h-4 w-4 text-slate-400" />
           <input
             id="password"
             type="password"
@@ -65,25 +67,23 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter team password"
-            className="h-12 w-full bg-transparent text-white placeholder:text-slate-400 focus:outline-none"
+            className="h-12 w-full bg-transparent text-navy placeholder:text-slate-400 focus:outline-none"
           />
         </div>
 
-        {error && <p className="mt-4 rounded-lg bg-red-500/15 px-3 py-2 text-sm text-red-200">{error}</p>}
+        {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
         <button
           type="submit"
           disabled={loading || !password}
-          className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white text-sm font-bold text-navy shadow-premium transition hover:shadow-glow disabled:opacity-50"
+          className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-600 text-sm font-bold text-white shadow-premium transition hover:bg-brand-700 hover:shadow-glow disabled:opacity-50"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
           {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-xs text-slate-400">
-        Authorized Snap Shield staff only.
-      </p>
+      <p className="mt-6 text-center text-xs text-slate-400">Authorized Snap Shield staff only.</p>
     </div>
   );
 }

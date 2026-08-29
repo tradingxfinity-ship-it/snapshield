@@ -281,7 +281,7 @@ export default function ProductForm({ mode, initial }: { mode: "new" | "edit"; i
       </Section>
 
       {/* Save bar */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 px-5 py-3 backdrop-blur lg:pl-72">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 px-5 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-end gap-3">
           <Link href="/admin/products" className="text-sm font-semibold text-slate-500 hover:text-navy">
             Cancel
