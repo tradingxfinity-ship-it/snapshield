@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Search, ExternalLink, LogOut, Loader2, Plus } from "lucide-react";
+import { Search, ExternalLink, LogOut, Loader2, Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -17,7 +17,19 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
   const [term, setTerm] = useState("");
+  const [toasts, setToasts] = useState<{ id: number; msg: string }[]>([]);
   const first = useRef(true);
+
+  useEffect(() => {
+    function onToast(e: Event) {
+      const msg = (e as CustomEvent<string>).detail;
+      const id = Date.now() + Math.random();
+      setToasts((t) => [...t, { id, msg }]);
+      setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 2600);
+    }
+    window.addEventListener("admin-toast", onToast);
+    return () => window.removeEventListener("admin-toast", onToast);
+  }, []);
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
@@ -125,6 +137,19 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
+
+      {/* toast host */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex flex-col items-center gap-2">
+        {toasts.map((t) => (
+          <div
+            key={t.id}
+            className="flex items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-premium"
+          >
+            <Check className="h-4 w-4 text-emerald-400" />
+            {t.msg}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

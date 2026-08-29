@@ -14,6 +14,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import type { ProductRow } from "@/lib/products";
+import { adminToast } from "../toast";
 
 type Spec = { label: string; value: string };
 
@@ -59,7 +60,15 @@ function fromRow(row?: ProductRow): FormState {
   };
 }
 
-export default function ProductForm({ mode, initial }: { mode: "new" | "edit"; initial?: ProductRow }) {
+export default function ProductForm({
+  mode,
+  initial,
+  preview = false,
+}: {
+  mode: "new" | "edit";
+  initial?: ProductRow;
+  preview?: boolean;
+}) {
   const router = useRouter();
   const [f, setF] = useState<FormState>(() => fromRow(initial));
   const [saving, setSaving] = useState(false);
@@ -73,6 +82,12 @@ export default function ProductForm({ mode, initial }: { mode: "new" | "edit"; i
   async function onUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (preview) {
+      set("image", URL.createObjectURL(file));
+      adminToast("Image added — preview only");
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
     setUploading(true);
     setError(null);
     try {
@@ -95,6 +110,14 @@ export default function ProductForm({ mode, initial }: { mode: "new" | "edit"; i
     setError(null);
     if (!f.name.trim()) {
       setError("Name is required.");
+      return;
+    }
+    if (preview) {
+      setSaving(true);
+      adminToast(mode === "new" ? "Product created — preview only" : "Saved — preview only, not live");
+      setTimeout(() => {
+        router.push("/admin/products");
+      }, 400);
       return;
     }
     setSaving(true);
@@ -136,9 +159,16 @@ export default function ProductForm({ mode, initial }: { mode: "new" | "edit"; i
         <ArrowLeft className="h-4 w-4" /> Back to products
       </Link>
 
-      <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">
-        {mode === "new" ? "New product" : `Edit ${initial?.name}`}
-      </h1>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <h1 className="font-display text-3xl font-bold tracking-tight">
+          {mode === "new" ? "New product" : `Edit ${initial?.name}`}
+        </h1>
+        {preview && (
+          <span className="rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand-700">
+            Preview — not saved
+          </span>
+        )}
+      </div>
 
       {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 

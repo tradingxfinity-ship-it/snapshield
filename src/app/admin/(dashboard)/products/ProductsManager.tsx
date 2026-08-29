@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Plus, Pencil, Trash2, Loader2, Star, PackageOpen, AlertCircle, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Star, PackageOpen, Sparkles, EyeOff } from "lucide-react";
 import type { ProductRow } from "@/lib/products";
 import { formatPrice } from "@/lib/utils";
+import { adminToast } from "../toast";
 
 export default function ProductsManager() {
   const searchParams = useSearchParams();
@@ -38,7 +39,15 @@ export default function ProductsManager() {
     load();
   }, []);
 
+  const preview = source === "static";
+
   async function remove(slug: string, name: string) {
+    if (preview) {
+      if (!confirm(`Delete "${name}"? (Preview — not saved to the live site.)`)) return;
+      setRows((r) => r.filter((x) => x.slug !== slug));
+      adminToast("Deleted — preview only, not saved");
+      return;
+    }
     if (!confirm(`Delete "${name}"? This can't be undone.`)) return;
     setDeleting(slug);
     const res = await fetch(`/api/admin/products/${slug}`, { method: "DELETE" });
@@ -74,11 +83,11 @@ export default function ProductsManager() {
         </div>
       </div>
 
-      {source === "static" && !loading && (
-        <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+      {preview && !loading && (
+        <div className="flex items-start gap-2 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-800">
+          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
           <span>
-            Read-only preview of the built-in catalogue. Connect Supabase (see Overview) to add, edit, and save products.
+            <strong>Preview mode.</strong> Explore everything — add, edit, delete, search. Changes are not saved to the live site. Connect Supabase (see Overview) to go live.
           </span>
         </div>
       )}
@@ -92,7 +101,7 @@ export default function ProductsManager() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {/* add card */}
-          {source === "db" && !q && (
+          {!q && (
             <Link
               href="/admin/products/new"
               className="group flex min-h-[15rem] flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-200 bg-white text-slate-400 transition hover:border-brand-300 hover:text-brand-600"
@@ -108,7 +117,7 @@ export default function ProductsManager() {
             <ProductTile
               key={p.slug}
               p={p}
-              editable={source === "db"}
+              editable
               deleting={deleting === p.slug}
               onDelete={() => remove(p.slug, p.name)}
             />
