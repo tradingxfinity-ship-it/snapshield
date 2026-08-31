@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Package, Star, Tag, ArrowRight, Database, AlertCircle, CheckCircle2, Sparkles } from "lucide-react";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "@/lib/supabase";
 import { isAdminConfigured } from "@/lib/admin-auth";
@@ -45,7 +46,15 @@ export default async function AdminOverview() {
       <div className="relative overflow-hidden rounded-3xl bg-navy px-7 py-8 text-white sm:px-9 sm:py-10">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy via-brand-900 to-brand-700" />
         <div className="pointer-events-none absolute -right-24 -top-16 h-72 w-72 rounded-full bg-brand-500/30 blur-3xl" />
-        <div className="relative">
+        <Image
+          src="/admin-hero-slabs.png"
+          alt="Snap Shield graded card guards in multiple colours"
+          width={1956}
+          height={1606}
+          priority
+          className="pointer-events-none absolute -bottom-6 right-4 hidden w-[280px] drop-shadow-2xl sm:block lg:right-10 lg:w-[320px] xl:w-[360px]"
+        />
+        <div className="relative max-w-lg">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-200 backdrop-blur">
             <Sparkles className="h-3 w-3" /> Store dashboard
           </span>
