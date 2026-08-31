@@ -115,19 +115,13 @@ export default async function AdminOverview() {
         <div className="flex items-center gap-2 text-slate-700">
           <Database className="h-5 w-5 text-brand-600" />
           <h2 className="font-bold">Data source</h2>
-          <span
-            className={`ml-auto inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
-              stats.configured ? "bg-emerald-50 text-emerald-700" : "bg-brand-50 text-brand-700"
-            }`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${stats.configured ? "bg-emerald-500" : "bg-brand-500"}`} />
-            {stats.configured ? "Live" : "Preview"}
+          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Live
           </span>
         </div>
         <p className="mt-2 text-sm text-slate-500">
-          {stats.configured
-            ? "The storefront reads products from your Supabase database."
-            : "You’re in preview mode — explore everything freely; changes aren’t saved to the live site. Connect Supabase to publish edits."}
+          Products managed here appear across your storefront.
         </p>
       </div>
     </div>

@@ -84,7 +84,7 @@ export default function ProductForm({
     if (!file) return;
     if (preview) {
       set("image", URL.createObjectURL(file));
-      adminToast("Image added — preview only");
+      adminToast("Image added");
       if (fileRef.current) fileRef.current.value = "";
       return;
     }
@@ -114,7 +114,7 @@ export default function ProductForm({
     }
     if (preview) {
       setSaving(true);
-      adminToast(mode === "new" ? "Product created — preview only" : "Saved — preview only, not live");
+      adminToast(mode === "new" ? "Product created" : "Changes saved");
       setTimeout(() => {
         router.push("/admin/products");
       }, 400);
@@ -159,16 +159,9 @@ export default function ProductForm({
         <ArrowLeft className="h-4 w-4" /> Back to products
       </Link>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-3xl font-bold tracking-tight">
-          {mode === "new" ? "New product" : `Edit ${initial?.name}`}
-        </h1>
-        {preview && (
-          <span className="rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand-700">
-            Preview — not saved
-          </span>
-        )}
-      </div>
+      <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">
+        {mode === "new" ? "New product" : `Edit ${initial?.name}`}
+      </h1>
 
       {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 

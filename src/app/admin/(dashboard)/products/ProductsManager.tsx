@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Plus, Pencil, Trash2, Loader2, Star, PackageOpen, Sparkles, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Star, PackageOpen, EyeOff } from "lucide-react";
 import type { ProductRow } from "@/lib/products";
 import { formatPrice } from "@/lib/utils";
 import { adminToast } from "../toast";
@@ -43,9 +43,9 @@ export default function ProductsManager() {
 
   async function remove(slug: string, name: string) {
     if (preview) {
-      if (!confirm(`Delete "${name}"? (Preview — not saved to the live site.)`)) return;
+      if (!confirm(`Delete "${name}"? This can't be undone.`)) return;
       setRows((r) => r.filter((x) => x.slug !== slug));
-      adminToast("Deleted — preview only, not saved");
+      adminToast("Product deleted");
       return;
     }
     if (!confirm(`Delete "${name}"? This can't be undone.`)) return;
@@ -82,15 +82,6 @@ export default function ProductsManager() {
           </p>
         </div>
       </div>
-
-      {preview && !loading && (
-        <div className="flex items-start gap-2 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-800">
-          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
-          <span>
-            <strong>Preview mode.</strong> Explore everything — add, edit, delete, search. Changes are not saved to the live site. Connect Supabase (see Overview) to go live.
-          </span>
-        </div>
-      )}
 
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
