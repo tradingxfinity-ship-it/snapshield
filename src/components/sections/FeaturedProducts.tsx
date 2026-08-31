@@ -2,11 +2,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getProducts } from "@/lib/products-source";
 import ProductCard from "../ui/ProductCard";
+import { ButtonLink } from "../ui/Button";
 import { Reveal } from "../ui/Reveal";
 
 export default async function FeaturedProducts() {
   const all = await getProducts();
-  const featured = all.slice(0, 4);
+  const featured = all.slice(0, 8);
   return (
     <section id="shop" className="relative py-24 lg:py-32">
       <div className="container-x">
@@ -32,6 +33,12 @@ export default async function FeaturedProducts() {
           {featured.map((p, i) => (
             <ProductCard key={p.slug} product={p} index={i} />
           ))}
+        </div>
+
+        <div className="mt-14 flex justify-center">
+          <ButtonLink href="/shop" size="lg">
+            Shop all finishes <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </ButtonLink>
         </div>
       </div>
     </section>
