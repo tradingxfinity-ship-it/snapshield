@@ -19,6 +19,8 @@ import {
   Check,
   ArrowLeft,
   ArrowRight,
+  Heart,
+  Plus,
 } from "lucide-react";
 import { categories } from "@/lib/products";
 import { useProducts, useShopImages } from "@/context/ProductsContext";
@@ -170,68 +172,101 @@ export default function ShopClient() {
             {list.map((p, i) => {
               const photo = shopImages[p.slug];
               const wished = wishlist.includes(p.slug);
+              const finish = p.colors[0];
+              const off = p.compareAt && p.compareAt > p.price ? Math.round((1 - p.price / p.compareAt) * 100) : 0;
               return (
                 <motion.div
                   key={p.slug}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: (i % 6) * 0.05 }}
-                  className="group flex flex-col rounded-2xl border border-slate-100 p-3 transition-shadow hover:shadow-soft"
+                  className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:border-slate-200 hover:shadow-premium"
                 >
-                  <div className="relative">
-                    <span className="absolute right-2 top-2 z-10 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-[11px] font-semibold text-navy backdrop-blur">
-                      {p.category}
-                    </span>
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-b from-mist to-white">
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-60 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{ background: `radial-gradient(90% 60% at 50% 12%, ${p.accent}1f, transparent 62%)` }}
+                    />
+
+                    <div className="absolute left-3.5 top-3.5 z-10 flex flex-col items-start gap-1.5">
+                      {p.badge && (
+                        <span
+                          className={cn(
+                            "rounded-full px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider backdrop-blur",
+                            p.bestSeller ? "bg-brand-600 text-white shadow-glow" : "bg-white/85 text-navy ring-1 ring-slate-200"
+                          )}
+                        >
+                          {p.badge}
+                        </span>
+                      )}
+                      {off > 0 && (
+                        <span className="rounded-full bg-rose-500 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-white shadow-sm">
+                          −{off}%
+                        </span>
+                      )}
+                    </div>
+
                     <button
                       onClick={() => toggleWishlist(p.slug)}
-                      aria-label="Wishlist"
-                      className="absolute left-2 top-2 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-slate-400 backdrop-blur transition hover:text-brand-600"
+                      aria-label="Add to wishlist"
+                      className="absolute right-3.5 top-3.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/85 text-slate-500 backdrop-blur transition hover:scale-110 hover:text-brand-600"
                     >
-                      <Star className={cn("h-4 w-4", wished && "fill-amber-400 text-amber-400")} />
+                      <Heart className={cn("h-4 w-4 transition", wished && "fill-brand-600 text-brand-600")} />
                     </button>
-                    <Link href={`/product/${p.slug}`} className="block aspect-[4/5] overflow-hidden rounded-xl bg-mist">
+
+                    <span className="absolute bottom-3.5 left-3.5 z-10 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-navy shadow-sm backdrop-blur">
+                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                      {p.rating} <span className="font-medium text-slate-400">({p.reviewCount.toLocaleString()})</span>
+                    </span>
+
+                    <Link href={`/product/${p.slug}`} className="block h-full w-full">
                       {photo ? (
                         <Image
                           src={photo.src}
                           alt={p.name}
                           fill
                           sizes="(max-width:640px) 100vw, 300px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         />
                       ) : (
                         <div className="grid h-full w-full place-items-center p-6">
-                          <SlabVisual accent={p.accent} guard={p.colors[0].hex} id={`shop-${p.slug}`} />
+                          <SlabVisual accent={p.accent} guard={finish.hex} id={`shop-${p.slug}`} />
                         </div>
                       )}
                     </Link>
                   </div>
 
-                  <div className="mt-4 flex flex-1 flex-col px-1">
-                    <Link href={`/product/${p.slug}`} className="text-base font-bold tracking-tight text-navy hover:text-brand-600">
-                      {p.name}
-                    </Link>
-                    <div className="mt-1.5 flex items-center justify-between gap-2">
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
-                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                        {p.rating} ({p.reviewCount.toLocaleString()} Reviews)
+                  <div className="flex flex-1 flex-col border-t border-slate-100 p-4">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-3.5 w-3.5 shrink-0 rounded-full ring-2 ring-white"
+                        style={{ background: finish.hex, boxShadow: `0 0 0 1px ${p.accent}55` }}
+                        title={finish.name}
+                      />
+                      <Link href={`/product/${p.slug}`} className="truncate text-[15px] font-bold tracking-tight text-navy transition-colors hover:text-brand-600">
+                        {p.name}
+                      </Link>
+                      <span className="ml-auto flex items-baseline gap-1.5">
+                        <span className="text-lg font-extrabold text-navy">{formatPrice(p.price)}</span>
+                        {p.compareAt && <span className="text-xs text-slate-400 line-through">{formatPrice(p.compareAt)}</span>}
                       </span>
-                      <span className="text-lg font-extrabold text-navy">{formatPrice(p.price)}</span>
                     </div>
+                    <p className="mt-1 line-clamp-1 text-[13px] text-slate-500">{p.tagline}</p>
 
-                    <div className="mt-4 grid grid-cols-2 gap-2">
+                    <div className="mt-4 flex gap-2">
                       <button
                         onClick={() =>
-                          addItem({ slug: p.slug, name: p.name, price: p.price, color: p.colors[0].name, accent: p.accent })
+                          addItem({ slug: p.slug, name: p.name, price: p.price, color: finish.name, accent: p.accent })
                         }
-                        className="rounded-full border border-slate-200 py-2.5 text-sm font-semibold text-navy transition hover:border-navy"
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-navy py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600 active:scale-[0.98]"
                       >
-                        Add to Cart
+                        <Plus className="h-4 w-4" /> Add to Cart
                       </button>
                       <Link
                         href={`/product/${p.slug}`}
-                        className="rounded-full bg-navy py-2.5 text-center text-sm font-semibold text-white transition hover:bg-brand-600"
+                        className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-navy transition hover:border-navy hover:bg-mist"
                       >
-                        Buy Now
+                        View
                       </Link>
                     </div>
                   </div>
