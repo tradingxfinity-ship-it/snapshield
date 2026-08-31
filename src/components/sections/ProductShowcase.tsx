@@ -19,7 +19,7 @@ export default function ProductShowcase() {
       <div className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-brand-200/40 blur-3xl" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent" />
 
-      <div className="container-x relative grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="container-x relative grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         {/* text */}
         <Reveal>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-700 shadow-soft">
@@ -53,7 +53,7 @@ export default function ProductShowcase() {
 
         {/* image — transparent PNG floating on the section */}
         <Reveal delay={0.1}>
-          <div className="relative">
+          <div className="relative lg:w-[115%] lg:max-w-none xl:w-[122%]">
             {/* ambient colour glow behind the slabs */}
             <div className="pointer-events-none absolute inset-0 -z-10 mx-auto my-auto h-[80%] w-[85%] rounded-full bg-[conic-gradient(from_180deg,#a855f7,#ef4444,#22d3ee,#22c55e,#f97316,#3b82f6,#a855f7)] opacity-25 blur-3xl" />
             <div className="animate-float">
