@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Package, Star, Tag, ArrowRight, Database, AlertCircle, CheckCircle2, Sparkles } from "lucide-react";
-import { isSupabaseAdminConfigured, supabaseAdmin } from "@/lib/supabase";
-import { isAdminConfigured } from "@/lib/admin-auth";
+import { Package, Star, Tag, ArrowRight, Database, Sparkles } from "lucide-react";
+import { supabaseAdmin } from "@/lib/supabase";
 import { products as staticProducts } from "@/lib/products";
-import SeedHint from "./SeedButton";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +30,6 @@ async function loadStats() {
 
 export default async function AdminOverview() {
   const stats = await loadStats();
-  const needsSetup = !isSupabaseAdminConfigured || !isAdminConfigured || stats.dbRows === 0;
 
   const tiles = [
     { label: "Products", value: stats.total, icon: Package, tint: "bg-brand-50 text-brand-600" },
@@ -62,9 +59,7 @@ export default async function AdminOverview() {
             Welcome back
           </h1>
           <p className="mt-1.5 max-w-md text-sm text-slate-300">
-            {stats.configured
-              ? "Your shop is live on Supabase — every edit publishes to the storefront."
-              : "Manage your shop from here. Connect Supabase to make edits go live."}
+            Manage your products, prices, and finishes — updates go straight to the storefront.
           </p>
           <Link
             href="/admin/products"
@@ -90,26 +85,6 @@ export default async function AdminOverview() {
         ))}
       </div>
 
-      {needsSetup && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
-          <div className="flex items-center gap-2 text-amber-800">
-            <AlertCircle className="h-5 w-5" />
-            <h2 className="font-bold">Finish setup</h2>
-          </div>
-          <p className="mt-1 text-sm text-amber-800/80">
-            Complete these steps to go live. See <code className="rounded bg-amber-100 px-1">ADMIN_SETUP.md</code> for details.
-          </p>
-          <ul className="mt-4 space-y-2 text-sm">
-            <SetupItem done={isAdminConfigured}>Set an <code>ADMIN_PASSWORD</code> for team login</SetupItem>
-            <SetupItem done={isSupabaseAdminConfigured}>Connect Supabase (URL + keys) and run <code>supabase/schema.sql</code></SetupItem>
-            <SetupItem done={stats.dbRows > 0}>
-              Seed your catalogue{" "}
-              {isSupabaseAdminConfigured && stats.dbRows === 0 && <SeedHint />}
-            </SetupItem>
-          </ul>
-        </div>
-      )}
-
       {/* data source */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6">
         <div className="flex items-center gap-2 text-slate-700">
@@ -125,18 +100,5 @@ export default async function AdminOverview() {
         </p>
       </div>
     </div>
-  );
-}
-
-function SetupItem({ done, children }: { done: boolean; children: React.ReactNode }) {
-  return (
-    <li className="flex items-start gap-2">
-      {done ? (
-        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-      ) : (
-        <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 border-amber-400" />
-      )}
-      <span className={done ? "text-slate-500 line-through" : "text-amber-900"}>{children}</span>
-    </li>
   );
 }
